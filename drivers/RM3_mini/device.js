@@ -31,20 +31,20 @@ class RM3miniDevice extends BroadlinkDevice {
 	 * Store the given name at the first available place in settings.
 	 * i.e. look for an entry 'RcCmd.' (where . is integer >= 0)
 	 */
-	async storeCmdSetting( cmdname ) {
+	async storeCmdSetting(cmdname) {
 
 		let settings = this.getSettings()
 
 		var idx = 0;
 		let settingName = 'RcCmd' + idx;
-		while( settingName in settings) {
+		while (settingName in settings) {
 			//Util.debugLog( settingName );
-			if( settings[ settingName ].length == 0 ) {
+			if (settings[settingName].length == 0) {
 				//Util.debugLog(this.getName()+' - storeCmdSettings - setting = '+settingName+', name = ' + cmdname );
 				let s = {
-						[settingName] : cmdname
-						}
-				await this.setSettings( s );
+					[settingName]: cmdname
+				}
+				await this.setSettings(s);
 				break;
 			}
 			idx++;
@@ -58,14 +58,14 @@ class RM3miniDevice extends BroadlinkDevice {
 	 * in the datastore are identical to the device settings.
 	 */
 	updateSettings() {
-		
+
 		let settings = this.getSettings()
 
 		// clear all settings
 		var idx = 0;
 		let settingName = 'RcCmd' + idx;
-		while( settingName in settings) {
-			this.setSettings( { [settingName] : "" } );
+		while (settingName in settings) {
+			this.setSettings({ [settingName]: "" });
 			idx++;
 			settingName = 'RcCmd' + idx;
 		}
@@ -73,19 +73,19 @@ class RM3miniDevice extends BroadlinkDevice {
 		// set all settings to dataStore names
 		idx = 0;
 		settingName = 'RcCmd' + idx;
-		this.dataStore.getCommandNameList().forEach( s => { 
-			this.setSettings( { [settingName] : s } );  
+		this.dataStore.getCommandNameList().forEach(s => {
+			this.setSettings({ [settingName]: s });
 			idx++;
 			settingName = 'RcCmd' + idx;
 		});
 	}
-	
+
 	/**
 	 * Sends the given command to the device and triggers the flows
 	 *
 	 * @param  args['variable'] = command with name
 	 */
-	async executeCommand( args ) {
+	async executeCommand(args) {
 
 		try {
 			let cmd = args['variable'];
@@ -93,19 +93,19 @@ class RM3miniDevice extends BroadlinkDevice {
 			//Util.debugLog('executeCommand '+cmd.name);
 
 			// send the command
-			let cmdData = this.dataStore.getCommandData( cmd.name )
-			await this._communicate.send_IR_RF_data( cmdData )
+			let cmdData = this.dataStore.getCommandData(cmd.name)
+			await this._communicate.send_IR_RF_data(cmdData)
 			cmdData = null;
 
 			let drv = this.getDriver();
 			// RC_specific_sent: user entered command name
-			drv.rm3mini_specific_cmd_trigger.trigger( this, {}, { 'variable':cmd.name })
+			drv.rm3mini_specific_cmd_trigger.trigger(this, {}, { 'variable': cmd.name })
 
 			// RC_sent_any: set token
-			drv.rm3mini_any_cmd_trigger.trigger( this, {'CommandSent':cmd.name}, {})
+			drv.rm3mini_any_cmd_trigger.trigger(this, { 'CommandSent': cmd.name }, {})
 
-		} catch( e ) { ; }
-		
+		} catch (e) { ; }
+
 		return Promise.resolve(true)
 	}
 
@@ -118,11 +118,11 @@ class RM3miniDevice extends BroadlinkDevice {
 	onAutoComplete() {
 		let lst = []
 		let names = this.dataStore.getCommandNameList()
-		for(var i = names.length -1; i >= 0; i--) {
-			let item =  {
-							"name": names[i]
-						};
-			lst.push( item )
+		for (var i = names.length - 1; i >= 0; i--) {
+			let item = {
+				"name": names[i]
+			};
+			lst.push(item)
 		}
 		return lst;
 	}
@@ -131,21 +131,21 @@ class RM3miniDevice extends BroadlinkDevice {
 	/**
 	 *
 	 */
-	check_condition_specific_cmd_sent( args, state ) {
-		return Promise.resolve( args.variable.name === state.variable )
+	check_condition_specific_cmd_sent(args, state) {
+		return Promise.resolve(args.variable.name === state.variable)
 	}
 
 
-	
+
 	/**
 	 *
 	 */
-	onInit() {
+	async onInit() {
 		super.onInit();
 		this.registerCapabilityListener('learnIRcmd', this.onCapabilityLearnIR.bind(this));
-		
-		this.dataStore = new DataStore( this.getData().mac )
-		this.dataStore.readCommands( this.updateSettings.bind(this) );
+
+		this.dataStore = new DataStore(this.getData().mac)
+		this.dataStore.readCommands(this.updateSettings.bind(this));
 	}
 
 
@@ -154,25 +154,25 @@ class RM3miniDevice extends BroadlinkDevice {
 	 * @param onoff
 	 */
 	async onCapabilityLearnIR(onoff) {
-	    if( this.learn ) {
-	    	return true;
-	    }
-	    this.learn = true;
+		if (this.learn) {
+			return true;
+		}
+		this.learn = true;
 
-	    try {
-		    await this._communicate.enter_learning()
-	    	let data = await this._communicate.check_IR_data()
-	    	if( data ) {
-	    		let idx = this.dataStore.dataArray.length + 1;
-	    		let cmdname = 'cmd' + idx;
-	    		this.dataStore.addCommand( cmdname, data);
+		try {
+			await this._communicate.enter_learning()
+			let data = await this._communicate.check_IR_data()
+			if (data) {
+				let idx = this.dataStore.dataArray.length + 1;
+				let cmdname = 'cmd' + idx;
+				this.dataStore.addCommand(cmdname, data);
 
-	    		await this.storeCmdSetting( cmdname )
-	    	}
-	    } catch( e ) { 
-			Util.debugLog('**> RM3miniDevice.onCapabilityLearnIR, rejected: ' +e);
-	    }
-	    this.learn = false;
+				await this.storeCmdSetting(cmdname)
+			}
+		} catch (e) {
+			Util.debugLog('**> RM3miniDevice.onCapabilityLearnIR, rejected: ' + e);
+		}
+		this.learn = false;
 	}
 
 
@@ -182,16 +182,16 @@ class RM3miniDevice extends BroadlinkDevice {
 	 *
 	 *  @param changedKeysArr   contains an array of keys that have been changed
 	 */
-	onSettings( oldSettingsObj, newSettingsObj, changedKeysArr, callback ) {
+	onSettings(oldSettingsObj, newSettingsObj, changedKeysArr, callback) {
 
-		super.onSettings( oldSettingsObj, newSettingsObj, changedKeysArr, null );
+		super.onSettings(oldSettingsObj, newSettingsObj, changedKeysArr, null);
 
 		let i = 0;
 		let oldName = '';
 		let newName = '';
 
 		// Verify all settings
-		for(i=0; i < changedKeysArr.length; i++ ) {
+		for (i = 0; i < changedKeysArr.length; i++) {
 			oldName = oldSettingsObj[changedKeysArr[i]] || '';
 			newName = newSettingsObj[changedKeysArr[i]] || '';
 
@@ -199,39 +199,39 @@ class RM3miniDevice extends BroadlinkDevice {
 			// has old + no new: delete
 			// no old + has new: error
 			// no old + no new: unused
-			if(newName.length > 0) {
-				if(oldName.length > 0) {
-					if( this.dataStore.findCommand( newName ) >= 0 ) {
-						callback( Homey.__('errors.save_settings_exist', { 'cmd': newName } ), false);
+			if (newName.length > 0) {
+				if (oldName.length > 0) {
+					if (this.dataStore.findCommand(newName) >= 0) {
+						callback(Homey.__('errors.save_settings_exist', { 'cmd': newName }), false);
 						return;
 					}
 				}
 				else {
-					callback( Homey.__('errors.save_settings_nocmd', {'cmd': newName }), null);
+					callback(Homey.__('errors.save_settings_nocmd', { 'cmd': newName }), null);
 					return;
 				}
 			}
 		}
 
 		// All settings OK, process them
-		for( i=0; i < changedKeysArr.length; i++ ) {
+		for (i = 0; i < changedKeysArr.length; i++) {
 			oldName = oldSettingsObj[changedKeysArr[i]] || ''
 			newName = newSettingsObj[changedKeysArr[i]] || ''
 
-			if( newName.length > 0) {
-				this.dataStore.renameCommand( oldName, newName );
+			if (newName.length > 0) {
+				this.dataStore.renameCommand(oldName, newName);
 			}
 			else {
-				this.dataStore.deleteCommand( oldName);
+				this.dataStore.deleteCommand(oldName);
 			}
 		}
 
-		callback( null, true );
+		callback(null, true);
 
-	    // always fire the callback, or the settings won't change!
-	    // if the settings must not be saved for whatever reason:
-	    //    callback( "Your error message", null );
-	    // else
+		// always fire the callback, or the settings won't change!
+		// if the settings must not be saved for whatever reason:
+		//    callback( "Your error message", null );
+		// else
 		//    callback("Your success message", true )
 	}
 

@@ -26,35 +26,33 @@ const Util = require('./../../lib/util.js');
 class BroadlinkRM3miniDriver extends BroadlinkDriver {
 
 
-	check_condition_specific_cmd( args, state ) {
-		return args.device.check_condition_specific_cmd_sent( args, state )
+	check_condition_specific_cmd(args, state) {
+		return args.device.check_condition_specific_cmd_sent(args, state)
 	}
 
-	do_exec_cmd( args, state ) {
-		return args.device.executeCommand( args );
+	do_exec_cmd(args, state) {
+		return args.device.executeCommand(args);
 	}
 
 
-	onInit() {
+	async onInit() {
 		super.onInit();
-		this.setCompatibilityID( 0x2737 )   // RM MINI
+		this.setCompatibilityID(0x2737)   // RM MINI
 
-		this.rm3mini_action_send_cmd = new Homey.FlowCardAction('send_command');
+		this.rm3mini_action_send_cmd = this.homey.flow.getActionCard('send_command_rm3mini');
 		this.rm3mini_action_send_cmd
-			.register()
-			.registerRunListener( this.do_exec_cmd.bind(this) )
+			.registerRunListener(this.do_exec_cmd.bind(this))
 			.getArgument('variable')
-			.registerAutocompleteListener(( query, args ) => { return args.device.onAutoComplete(); });
+			.registerAutocompleteListener((query, args) => { return args.device.onAutoComplete(); });
 
 		// Register a function to fill the trigger-flowcard 'RC_specific_sent' (see app.json)
-		this.rm3mini_specific_cmd_trigger = new Homey.FlowCardTriggerDevice('RC_specific_sent');
+		this.rm3mini_specific_cmd_trigger = this.homey.flow.getDeviceTriggerCard('RC_specific_sent_rm3mini');
 		this.rm3mini_specific_cmd_trigger
-			.register()
-			.registerRunListener( this.check_condition_specific_cmd.bind(this) )
+			.registerRunListener(this.check_condition_specific_cmd.bind(this))
 			.getArgument('variable')
-			.registerAutocompleteListener(( query, args ) => { return args.device.onAutoComplete(); })
+			.registerAutocompleteListener((query, args) => { return args.device.onAutoComplete(); })
 
-		this.rm3mini_any_cmd_trigger = new Homey.FlowCardTriggerDevice('RC_sent_any').register()
+		this.rm3mini_any_cmd_trigger = this.homey.flow.getDeviceTriggerCard('RC_sent_any_rm3mini');
 	}
 
 }
