@@ -20,7 +20,7 @@
 
 const Homey = require('homey');
 const RM3MiniDevice = require('./../RM3_mini/device');
-const Util = require('./../../lib/util.js');
+const BroadlinkUtils = require('./../../lib/BroadlinkUtils.js');
 
 
 class RmPlusDevice extends RM3MiniDevice {
@@ -46,7 +46,7 @@ class RmPlusDevice extends RM3MiniDevice {
 		try {
 			await this._communicate.cancelRFSweep();
 		} catch (e) {
-			Util.debugLog('**> stopRfLearning: ' + e)
+			this._utils.debugLog('**> stopRfLearning: ' + e)
 		}
 		this.learn = false;
 	}
@@ -91,7 +91,7 @@ class RmPlusDevice extends RM3MiniDevice {
 
 		} catch (e) { }
 
-		//Util.debugLog('**> Learing RF failed')
+		//this._utils.debugLog('**> Learing RF failed')
 		await Homey.ManagerSpeechOutput.say(Homey.__('rf_learn.done'))
 		await this.stopRfLearning();
 		return false;

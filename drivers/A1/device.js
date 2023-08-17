@@ -19,7 +19,7 @@
 'use strict';
 
 /* const Homey = require('homey'); */
-const Util = require('./../../lib/util.js');
+const BroadlinkUtils = require('./../../lib/BroadlinkUtils.js');
 const BroadlinkDevice = require('./../../lib/BroadlinkDevice');
 
 
@@ -233,7 +233,7 @@ class A1Device extends BroadlinkDevice {
 			if (curr_noise != this.noise_level) { drv.a1_trigger_noise_level.trigger(this, { 'noiselevel': str_noise }, {}) }
 
 		} catch (e) {
-			Util.debugLog('**> A1.onCheckInterval: ' + e);
+			this._utils.debugLog('**> A1.onCheckInterval: ' + e);
 		}
 
 	}

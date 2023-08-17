@@ -19,7 +19,7 @@
 'use strict';
 
 //const Homey = require('homey');
-const Util = require('./../../lib/util.js');
+const BroadlinkUtils = require('./../../lib/BroadlinkUtils.js');
 const BroadlinkDevice = require('./../../lib/BroadlinkDevice');
 
 
@@ -104,7 +104,7 @@ class DooyaDevice extends BroadlinkDevice {
 			let res = await this._communicate.dooya_set_state(cmd1, cmd2);
 			return res
 		}
-		catch (err) { Util.debugLog("**> DooyaDevice._sendCommand " + cmd1 + "." + cmd2 + ": error = " + err); }
+		catch (err) { this._utils.debugLog("**> DooyaDevice._sendCommand " + cmd1 + "." + cmd2 + ": error = " + err); }
 	}
 
 	async onCapabilityWcClosed(state) {

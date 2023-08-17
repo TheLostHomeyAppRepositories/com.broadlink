@@ -20,7 +20,7 @@
 
 const BroadlinkDriver = require('./../../lib/BroadlinkDriver');
 const Homey = require('homey');
-const Util = require('./../../lib/util.js');
+const BroadlinkUtils = require('./../../lib/BroadlinkUtils.js');
 
 
 class HysenDriver extends BroadlinkDriver {

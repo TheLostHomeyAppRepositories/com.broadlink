@@ -20,7 +20,7 @@
 
 const Homey = require('homey');
 const BroadlinkDriver = require('./../../lib/BroadlinkDriver');
-//const Util = require('./../../lib/util.js');
+//const BroadlinkUtils = require('./../../lib/BroadlinkUtils.js');
 
 
 class DooyaDriver extends BroadlinkDriver {
@@ -69,7 +69,7 @@ class DooyaDriver extends BroadlinkDriver {
 	 */
 	onPair(session) {
 		super.onPair(session);
-		//Util.debugLog('dooya.onPair')
+		//this._utils.debugLog('dooya.onPair')
 
 		session.setHandler('properties_set', async (data) => {
 			// data = { 'deviceList': deviceData }

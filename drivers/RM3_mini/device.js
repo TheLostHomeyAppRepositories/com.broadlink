@@ -19,7 +19,7 @@
 'use strict';
 
 const Homey = require('homey');
-const Util = require('./../../lib/util.js');
+const BroadlinkUtils = require('./../../lib/BroadlinkUtils.js');
 const BroadlinkDevice = require('./../../lib/BroadlinkDevice');
 const DataStore = require('./../../lib/DataStore.js')
 
@@ -38,9 +38,9 @@ class RM3miniDevice extends BroadlinkDevice {
 		var idx = 0;
 		let settingName = 'RcCmd' + idx;
 		while (settingName in settings) {
-			//Util.debugLog( settingName );
+			//this._utils.debugLog( settingName );
 			if (settings[settingName].length == 0) {
-				//Util.debugLog(this.getName()+' - storeCmdSettings - setting = '+settingName+', name = ' + cmdname );
+				//this._utils.debugLog(this.getName()+' - storeCmdSettings - setting = '+settingName+', name = ' + cmdname );
 				let s = {
 					[settingName]: cmdname
 				}
@@ -90,7 +90,7 @@ class RM3miniDevice extends BroadlinkDevice {
 		try {
 			let cmd = args['variable'];
 
-			//Util.debugLog('executeCommand '+cmd.name);
+			//this._utils.debugLog('executeCommand '+cmd.name);
 
 			// send the command
 			let cmdData = this.dataStore.getCommandData(cmd.name)
@@ -170,7 +170,7 @@ class RM3miniDevice extends BroadlinkDevice {
 				await this.storeCmdSetting(cmdname)
 			}
 		} catch (e) {
-			Util.debugLog('**> RM3miniDevice.onCapabilityLearnIR, rejected: ' + e);
+			this._utils.debugLog('**> RM3miniDevice.onCapabilityLearnIR, rejected: ' + e);
 		}
 		this.learn = false;
 	}

@@ -20,7 +20,7 @@
 
 const Homey = require('homey');
 const BroadlinkDevice = require('./../../lib/BroadlinkDevice');
-const Util = require('./../../lib/util.js');
+const BroadlinkUtils = require('./../../lib/BroadlinkUtils.js');
 
 
 class SP1Device extends BroadlinkDevice {

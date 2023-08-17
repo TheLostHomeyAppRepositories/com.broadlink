@@ -79,7 +79,7 @@
 
 <script type="text/javascript">
 
-   this.homey.setTitle(Homey.__('pair.title'));
+   Homey.setTitle(Homey.__('pair.title'));
 
    function showError(msg) {
       document.getElementById('broadlink-error').innerHTML = msg;
@@ -87,6 +87,7 @@
 
    function add(data) {
       var ipAddressElement = document.getElementById('address');
+
       var device = {
          address: ipAddressElement.value.trim()
       }
@@ -97,14 +98,13 @@
          }
          else {
             showError(Homey.__('pair.discovering'));
-            Homey.emit('start_discover', device, null)
+            Homey.emit('start_discover', device, null);
          }
       }
       else {
-         showError(Homey.__('pair.invalid_ipaddress'))
+         showError(Homey.__('pair.invalid_ipaddress'));
       }
    }
-
 
    Homey.on('discovered', function (deviceData) {
 
