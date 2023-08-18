@@ -19,7 +19,6 @@
 'use strict';
 
 const BroadlinkDriver = require('./../../lib/BroadlinkDriver');
-const Homey = require('homey');
 
 
 class BroadlinkSP1Driver extends BroadlinkDriver {

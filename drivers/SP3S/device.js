@@ -18,8 +18,6 @@
 
 'use strict';
 
-const Homey = require('homey');
-const BroadlinkUtils = require('./../../lib/BroadlinkUtils.js');
 const SP2Device = require('./../SP2/device');
 
 

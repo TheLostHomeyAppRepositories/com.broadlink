@@ -19,8 +19,6 @@
 'use strict';
 
 const BroadlinkDriver = require('./../../lib/BroadlinkDriver');
-const Homey = require('homey');
-const BroadlinkUtils = require('./../../lib/BroadlinkUtils.js');
 
 
 class BroadlinkRM3miniDriver extends BroadlinkDriver {

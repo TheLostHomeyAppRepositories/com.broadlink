@@ -38,8 +38,6 @@ Check              0x4b37
 
 'use strict';
 
-const Homey = require('homey');
-const BroadlinkUtils = require('./../../lib/BroadlinkUtils.js');
 const BroadlinkDevice = require('./../../lib/BroadlinkDevice');
 const CRC16 = require('crc').crc16modbus;
 
@@ -195,7 +193,7 @@ class HysenDevice extends BroadlinkDevice {
 		if (changedKeysArr.indexOf('SensorUpperLimit') >= 0) { upperlimit = newSettingsObj['SensorUpperLimit'] }
 		if (changedKeysArr.indexOf('SensorLowerLimit') >= 0) { lowerlimit = newSettingsObj['SensorLowerLimit'] }
 		if (upperlimit <= lowerlimit) {
-			callback(Homey.__("errors.invalid_sensor_limits"));
+			callback(this.homey.__("errors.invalid_sensor_limits"));
 			return
 		}
 
@@ -207,7 +205,7 @@ class HysenDevice extends BroadlinkDevice {
 			(!this._isValidTime('weekday6', changedKeysArr, newSettingsObj)) ||
 			(!this._isValidTime('weekend1', changedKeysArr, newSettingsObj)) ||
 			(!this._isValidTime('weekend2', changedKeysArr, newSettingsObj))) {
-			callback(Homey.__('errors.invalid_schedule_time'));
+			callback(this.homey.__('errors.invalid_schedule_time'));
 			return
 		}
 

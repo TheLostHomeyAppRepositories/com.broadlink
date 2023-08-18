@@ -18,8 +18,6 @@
 
 'use strict';
 
-const Homey = require('homey');
-const BroadlinkUtils = require('./../../lib/BroadlinkUtils.js');
 const BroadlinkDevice = require('./../../lib/BroadlinkDevice');
 const DataStore = require('./../../lib/DataStore.js')
 
@@ -202,12 +200,12 @@ class RM3miniDevice extends BroadlinkDevice {
 			if (newName.length > 0) {
 				if (oldName.length > 0) {
 					if (this.dataStore.findCommand(newName) >= 0) {
-						callback(Homey.__('errors.save_settings_exist', { 'cmd': newName }), false);
+						callback(this.homey.__('errors.save_settings_exist', { 'cmd': newName }), false);
 						return;
 					}
 				}
 				else {
-					callback(Homey.__('errors.save_settings_nocmd', { 'cmd': newName }), null);
+					callback(this.homey.__('errors.save_settings_nocmd', { 'cmd': newName }), null);
 					return;
 				}
 			}

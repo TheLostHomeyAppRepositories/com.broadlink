@@ -18,9 +18,7 @@
 
 'use strict';
 
-const Homey = require('homey');
 const RM3MiniDevice = require('./../RM3_mini/device');
-const BroadlinkUtils = require('./../../lib/BroadlinkUtils.js');
 
 
 class RmPlusDevice extends RM3MiniDevice {
@@ -68,10 +66,10 @@ class RmPlusDevice extends RM3MiniDevice {
 			var data;
 			await this._communicate.enterRFSweep()
 
-			await Homey.ManagerSpeechOutput.say(Homey.__('rf_learn.long_press'))
+			await this.homey.speechOutput.say(this.homey.__('rf_learn.long_press'))
 			await this._communicate.checkRFData()
 
-			await Homey.ManagerSpeechOutput.say(Homey.__('rf_learn.multi_presses'))
+			await this.homey.speechOutput.say(this.homey.__('rf_learn.multi_presses'))
 			if ((type == 0x279D) || (type == 0x27A9)) {
 				await this._communicate.enter_learning()
 				data = await this._communicate.check_IR_data()
@@ -86,13 +84,13 @@ class RmPlusDevice extends RM3MiniDevice {
 				await this.storeCmdSetting(cmdname);
 			}
 			await this.stopRfLearning();
-			await Homey.ManagerSpeechOutput.say(Homey.__('rf_learn.done'))
+			await this.homey.speechOutput.say(this.homey.__('rf_learn.done'))
 			return true;
 
 		} catch (e) { }
 
-		//this._utils.debugLog('**> Learing RF failed')
-		await Homey.ManagerSpeechOutput.say(Homey.__('rf_learn.done'))
+		this._utils.debugLog('**> Learing RF failed')
+		await this.homey.speechOutput.say(this.homey.__('rf_learn.done'))
 		await this.stopRfLearning();
 		return false;
 	}

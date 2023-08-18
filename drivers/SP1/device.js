@@ -18,9 +18,7 @@
 
 'use strict';
 
-const Homey = require('homey');
 const BroadlinkDevice = require('./../../lib/BroadlinkDevice');
-const BroadlinkUtils = require('./../../lib/BroadlinkUtils.js');
 
 
 class SP1Device extends BroadlinkDevice {
