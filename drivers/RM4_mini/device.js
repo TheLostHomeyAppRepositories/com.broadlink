@@ -18,11 +18,11 @@
 
 'use strict';
 
-const BroadlinkDevice = require('./../../lib/BroadlinkDevice');
-const DataStore = require('./../../lib/DataStore.js')
+const BroadlinkDevice = require('../../lib/BroadlinkDevice');
+const DataStore = require('../../lib/DataStore.js')
 
 
-class RM4Device extends BroadlinkDevice {
+class RM4miniDevice extends BroadlinkDevice {
 
 
 	/**
@@ -168,7 +168,7 @@ class RM4Device extends BroadlinkDevice {
 				await this.storeCmdSetting(cmdname)
 			}
 		} catch (e) {
-			this._utils.debugLog('**> RM4Device.onCapabilityLearnIR, rejected: ' + e);
+			this._utils.debugLog('**> RM4miniDevice.onCapabilityLearnIR, rejected: ' + e);
 		}
 		this.learn = false;
 	}
@@ -244,4 +244,4 @@ class RM4Device extends BroadlinkDevice {
 
 }
 
-module.exports = RM4Device;
+module.exports = RM4miniDevice;
