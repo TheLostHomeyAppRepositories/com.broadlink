@@ -1,0 +1,102 @@
+{
+  "id": "RM4_pro",
+  "name": {
+    "en": "RM4 Pro",
+    "nl": "RM4 Pro"
+  },
+  "images": {
+    "large": ".{{driverAssetsPath}}/images/large.jpg",
+    "small": ".{{driverAssetsPath}}/images/small.jpg"
+  },
+  "class": "other",
+  "capabilities": ["learnIRcmd"],
+  "mobile": {
+    "components": [
+      {
+        "id": "icon",
+        "capabilities": []
+      },
+      {
+        "id": "button",
+        "capabilities": ["learnIRcmd"]
+      }
+    ]
+  },
+  "pair": [
+    {
+      "$template": "start",
+      "id": "start"
+    },
+    {
+      "id": "list_devices",
+      "template": "list_devices",
+      "navigation": {
+        "next": "add_devices"
+      }
+    },
+    {
+      "id": "add_devices",
+      "template": "add_devices"
+    }
+  ],
+  "$extends": ["rm.settings"],
+  "$flow": {
+    "triggers": [
+      {
+        "id": "RC_sent_any_rm4_pro",
+        "title": {
+          "en": "Any Remote Command transmitted",
+          "nl": "Commando verzonden"
+        },
+        "tokens": [
+          {
+            "name": "CommandSent",
+            "type": "string",
+            "title": {
+              "en": "Command sent",
+              "nl": "Verzonden commando"
+            },
+            "example": {
+              "en": "Program Up",
+              "nl": "Volgend Programma"
+            }
+          }
+        ]
+      },
+      {
+        "id": "RC_specific_sent_rm4_pro",
+        "title": {
+          "en": "Remote Command transmitted",
+          "nl": "Commando verzonden"
+        },
+        "args": [
+          {
+            "name": "variable",
+            "type": "autocomplete",
+            "placeholder": { "en": "name", "nl": "naam" }
+          }
+        ]
+      }
+    ],
+    "conditions": [],
+    "actions": [
+      {
+        "id": "send_command_rm4_pro",
+        "title": {
+          "en": "Send Remote Command",
+          "nl": "Verstuur commando"
+        },
+        "args": [
+          {
+            "name": "variable",
+            "type": "autocomplete",
+            "placeholder": {
+              "en": "name",
+              "nl": "naam"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
